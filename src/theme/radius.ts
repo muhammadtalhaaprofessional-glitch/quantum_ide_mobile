@@ -1,11 +1,10 @@
-// Radius stores the corner radii for cards, inputs, and control surfaces.
-// A few reusable values keep the interface sleek and modern without over-styling each component.
+// radius.ts defines the border-radius tokens used throughout the interface.
+// These values support subtle, modern surfaces without introducing visual noise.
 export const radius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
+  none: 0,
+  sm: 6,
+  md: 10,
+  lg: 14,
   xl: 20,
   pill: 999,
 } as const;
-
-export type QuantumRadius = typeof radius;

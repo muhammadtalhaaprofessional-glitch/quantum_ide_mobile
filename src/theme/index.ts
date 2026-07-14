@@ -1,8 +1,8 @@
-// Index re-exports the design system tokens for a single import path.
-// This makes the theme easy to consume throughout the application.
-export { colors, type QuantumColors } from "./colors";
-export { radius, type QuantumRadius } from "./radius";
-export { shadows, type QuantumShadows } from "./shadows";
-export { spacing, type QuantumSpacing } from "./spacing";
-export { typography, type QuantumTypography } from "./typography";
+// index.ts consolidates the theme tokens into a single import surface.
+// This keeps the design system clean and easy to consume across the app.
+export { colors } from "./colors";
+export { radius } from "./radius";
+export { shadows } from "./shadows";
+export { spacing } from "./spacing";
+export { typography } from "./typography";
 

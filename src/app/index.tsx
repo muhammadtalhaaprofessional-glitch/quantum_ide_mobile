@@ -1,98 +1,79 @@
-import * as Device from "expo-device";
-import { Platform, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
 
-import { AnimatedIcon } from "@/components/common/animated-icon";
-import { HintRow } from "@/components/common/hint-row";
-import { ThemedText } from "@/components/common/themed-text";
-import { ThemedView } from "@/components/common/themed-view";
-import { WebBadge } from "@/components/common/web-badge";
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
-
-function getDevMenuHint() {
-  if (Platform.OS === "web") {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === "android" ? "cmd+m (or ctrl+m)" : "cmd+d";
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import PrimaryButton from "@/components/buttons/PrimaryButton";
+import ScreenContainer from "@/components/layout/ScreenContainer";
+import { colors, radius, spacing, typography } from "@/theme";
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <ScreenContainer>
+      <View style={styles.content}>
+        <View style={styles.iconContainer}>
+          <Text style={styles.icon}>⚛</Text>
+        </View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+        <Text style={styles.title}>Quantum IDE</Text>
+        <Text style={styles.subtitle}>Build • Simulate • Explore</Text>
+        <Text style={styles.description}>
+          Develop, simulate, and manage quantum computing projects from
+          anywhere.
+        </Text>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === "web" && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        <PrimaryButton
+          title="Continue"
+          onPress={() => router.push("/explore")}
+        />
+      </View>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     flex: 1,
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: "center",
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    paddingVertical: spacing.xxl,
+    maxWidth: 480,
+    alignSelf: "center",
+    width: "100%",
+  },
+  iconContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: radius.xl,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.brand.primarySoft,
+    marginBottom: spacing.xl,
+  },
+  icon: {
+    fontSize: 48,
+    color: colors.brand.secondary,
   },
   title: {
+    fontSize: typography.fontSize.display,
+    fontWeight: typography.fontWeight.bold,
+    fontFamily: typography.fontFamily.sans,
+    color: colors.text.primary,
     textAlign: "center",
+    marginBottom: spacing.sm,
   },
-  code: {
-    textTransform: "uppercase",
+  subtitle: {
+    fontSize: typography.fontSize.lg,
+    fontWeight: typography.fontWeight.semibold,
+    fontFamily: typography.fontFamily.sans,
+    color: colors.brand.secondary,
+    textAlign: "center",
+    marginBottom: spacing.md,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: "stretch",
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  description: {
+    fontSize: typography.fontSize.md,
+    fontFamily: typography.fontFamily.sans,
+    color: colors.text.secondary,
+    textAlign: "center",
+    lineHeight: typography.lineHeight.relaxed,
+    marginBottom: spacing.xl,
   },
 });

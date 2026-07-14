@@ -1,32 +1,32 @@
-// Colors defines the premium dark palette for Quantum IDE.
-// It centralizes brand, surface, text, and accent values so components can reuse a consistent visual language.
+// colors.ts defines the core color primitives for the Quantum IDE design system.
+// It centralizes the dark palette, brand accents, surface layering, and text contrast so UI tokens remain consistent.
 export const colors = {
   brand: {
-    primary: "#6EE7F9",
-    secondary: "#8B5CF6",
-    accent: "#3B82F6",
-    success: "#34D399",
-    warning: "#F59E0B",
-    danger: "#F87171",
+    primary: "#6C63FF",
+    secondary: "#00E5FF",
+    primarySoft: "rgba(108, 99, 255, 0.16)",
+    secondarySoft: "rgba(0, 229, 255, 0.16)",
   },
-  surface: {
-    base: "#060816",
-    elevated: "#0F172A",
-    overlay: "#111827",
-    muted: "#1E293B",
-    border: "#243244",
+  background: {
+    base: "#090909",
+    surface: "#121212",
+    elevated: "#171717",
+    overlay: "rgba(9, 9, 9, 0.85)",
   },
   text: {
-    primary: "#F8FAFC",
-    secondary: "#94A3B8",
-    muted: "#64748B",
-    inverse: "#020617",
+    primary: "#FFFFFF",
+    secondary: "#A0A0A0",
+    muted: "#707070",
+    inverse: "#090909",
+  },
+  border: {
+    subtle: "rgba(255, 255, 255, 0.08)",
+    strong: "rgba(255, 255, 255, 0.16)",
   },
   state: {
-    hover: "rgba(110, 231, 249, 0.16)",
-    selected: "rgba(59, 130, 246, 0.22)",
-    focus: "rgba(110, 231, 249, 0.28)",
+    success: "#22C55E",
+    warning: "#F59E0B",
+    danger: "#EF4444",
+    info: "#00E5FF",
   },
 } as const;
-
-export type QuantumColors = typeof colors;

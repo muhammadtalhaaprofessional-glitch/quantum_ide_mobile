@@ -1,41 +1,40 @@
-// Typography defines the text system for premium, readable UI.
-// It provides a consistent font scale and semantic text styles for headings, body, and code content.
+// typography.ts defines the type system for the Quantum IDE experience.
+// It provides cross-platform font families, sizes, weights, and line heights for polished readability.
 import { Platform } from "react-native";
 
 export const typography = {
-  fonts: {
+  fontFamily: {
     sans: Platform.select({
       ios: "System",
       android: "Roboto",
-      default: "System",
+      default:
+        "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     }),
     mono: Platform.select({
       ios: "Menlo",
       android: "monospace",
-      default: "monospace",
+      default: "SFMono-Regular, Consolas, 'Liberation Mono', monospace",
     }),
   },
-  sizes: {
+  fontSize: {
     xs: 12,
     sm: 14,
     md: 16,
     lg: 18,
     xl: 24,
     xxl: 32,
-    title: 40,
+    display: 40,
   },
-  weights: {
+  fontWeight: {
     regular: "400" as const,
     medium: "500" as const,
     semibold: "600" as const,
     bold: "700" as const,
   },
-  lineHeights: {
+  lineHeight: {
     tight: 18,
     normal: 22,
     relaxed: 28,
     spacious: 36,
   },
 } as const;
-
-export type QuantumTypography = typeof typography;
