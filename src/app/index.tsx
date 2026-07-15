@@ -1,79 +1,92 @@
-import { router } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import PrimaryButton from "@/components/buttons/PrimaryButton";
+import ActionButton from "@/components/buttons/ActionButton";
+import ProjectCard from "@/components/cards/ProjectCard";
+import SectionHeader from "@/components/common/SectionHeader";
 import ScreenContainer from "@/components/layout/ScreenContainer";
-import { colors, radius, spacing, typography } from "@/theme";
+import { projects } from "@/data/projects";
+import { colors, radius, shadows, spacing, typography } from "@/theme";
+
+const quickActions = [
+  { title: "New Project", icon: "add-circle-outline" as const },
+  { title: "Run Simulation", icon: "play-forward-outline" as const },
+  { title: "Ask AI", icon: "sparkles-outline" as const },
+];
 
 export default function HomeScreen() {
   return (
     <ScreenContainer>
-      <View style={styles.content}>
-        <View style={styles.iconContainer}>
-          <Text style={styles.icon}>⚛</Text>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View style={styles.hero}>
+          <Text style={styles.heroTitle}>Quantum IDE</Text>
+          <Text style={styles.heroSubtitle}>
+            Your mobile companion for quantum computing.
+          </Text>
         </View>
 
-        <Text style={styles.title}>Quantum IDE</Text>
-        <Text style={styles.subtitle}>Build • Simulate • Explore</Text>
-        <Text style={styles.description}>
-          Develop, simulate, and manage quantum computing projects from
-          anywhere.
-        </Text>
+        <View style={styles.section}>
+          <SectionHeader title="Recent Projects" />
+          {projects.slice(0, 3).map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onPress={() => undefined}
+            />
+          ))}
+        </View>
 
-        <PrimaryButton
-          title="Continue"
-          onPress={() => router.push("/explore")}
-        />
-      </View>
+        <View style={styles.section}>
+          <SectionHeader title="Quick Actions" />
+          <View style={styles.actionsList}>
+            {quickActions.map((action) => (
+              <ActionButton
+                key={action.title}
+                title={action.title}
+                icon={action.icon}
+                onPress={() => undefined}
+              />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: spacing.xxl,
-    maxWidth: 480,
-    alignSelf: "center",
+  scroll: {
     width: "100%",
   },
-  iconContainer: {
-    width: 96,
-    height: 96,
+  contentContainer: {
+    paddingBottom: spacing.xxxl,
+  },
+  hero: {
+    marginBottom: spacing.xxl,
+    paddingVertical: spacing.xl,
+    paddingHorizontal: spacing.lg,
+    backgroundColor: colors.background.elevated,
     borderRadius: radius.xl,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.brand.primarySoft,
-    marginBottom: spacing.xl,
+    ...shadows.glow,
   },
-  icon: {
-    fontSize: 48,
-    color: colors.brand.secondary,
-  },
-  title: {
-    fontSize: typography.fontSize.display,
-    fontWeight: typography.fontWeight.bold,
-    fontFamily: typography.fontFamily.sans,
+  heroTitle: {
     color: colors.text.primary,
-    textAlign: "center",
+    fontSize: typography.fontSize.xxl,
+    fontWeight: typography.fontWeight.bold,
     marginBottom: spacing.sm,
   },
-  subtitle: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: typography.fontWeight.semibold,
-    fontFamily: typography.fontFamily.sans,
-    color: colors.brand.secondary,
-    textAlign: "center",
-    marginBottom: spacing.md,
-  },
-  description: {
-    fontSize: typography.fontSize.md,
-    fontFamily: typography.fontFamily.sans,
+  heroSubtitle: {
     color: colors.text.secondary,
-    textAlign: "center",
+    fontSize: typography.fontSize.md,
     lineHeight: typography.lineHeight.relaxed,
+  },
+  section: {
+    gap: spacing.md,
     marginBottom: spacing.xl,
+  },
+  actionsList: {
+    gap: spacing.md,
   },
 });
