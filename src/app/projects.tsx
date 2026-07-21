@@ -3,28 +3,60 @@ import {
     FlatList,
     StyleSheet,
     Text,
-    TextInput,
     View,
     type ListRenderItem,
 } from "react-native";
 
 import ProjectCard from "@/components/cards/ProjectCard";
-import SectionHeader from "@/components/common/SectionHeader";
+import EmptyState from "@/components/common/EmptyState";
+import FloatingActionButton from "@/components/common/FloatingActionButton";
+import SearchBar from "@/components/inputs/SearchBar";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import { ProjectService } from "@/services/projectService";
-import { colors, radius, shadows, spacing, typography } from "@/theme";
+import { colors, spacing, typography } from "@/theme";
 import { Project } from "@/types/project";
 
 export default function ProjectsScreen() {
   const [query, setQuery] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ProjectService.getProjects().then(setProjects);
+    let isMounted = true;
+
+    const loadProjects = async () => {
+      setIsLoading(true);
+      const data = await ProjectService.getProjects();
+      if (isMounted) {
+        setProjects(data);
+        setIsLoading(false);
+      }
+    };
+
+    loadProjects();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
-    ProjectService.searchProjects(query).then(setProjects);
+    let isMounted = true;
+
+    const searchProjects = async () => {
+      setIsLoading(true);
+      const data = await ProjectService.searchProjects(query);
+      if (isMounted) {
+        setProjects(data);
+        setIsLoading(false);
+      }
+    };
+
+    searchProjects();
+
+    return () => {
+      isMounted = false;
+    };
   }, [query]);
 
   const renderItem: ListRenderItem<Project> = ({ item }) => (
@@ -34,17 +66,15 @@ export default function ProjectsScreen() {
   return (
     <ScreenContainer>
       <View style={styles.header}>
-        <SectionHeader title="Projects" />
+        <Text style={styles.title}>Projects</Text>
         <Text style={styles.subtitle}>
-          Find and manage your active quantum experiments.
+          Manage and organize your quantum projects.
         </Text>
-        <TextInput
-          style={styles.searchInput}
+        <SearchBar
           value={query}
           onChangeText={setQuery}
           placeholder="Search projects"
-          placeholderTextColor={colors.text.secondary}
-          accessibilityLabel="Search projects"
+          onClear={() => setQuery("")}
         />
       </View>
 
@@ -54,10 +84,10 @@ export default function ProjectsScreen() {
         renderItem={renderItem}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>No matching projects found.</Text>
-        }
+        ListEmptyComponent={!isLoading ? <EmptyState /> : null}
       />
+
+      <FloatingActionButton label="New Project" onPress={() => undefined} />
     </ScreenContainer>
   );
 }
@@ -65,34 +95,21 @@ export default function ProjectsScreen() {
 const styles = StyleSheet.create({
   header: {
     paddingBottom: spacing.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border.subtle,
     marginBottom: spacing.lg,
+  },
+  title: {
+    color: colors.text.primary,
+    fontSize: typography.fontSize.xl,
+    fontWeight: typography.fontWeight.bold,
+    marginBottom: spacing.xs,
   },
   subtitle: {
     color: colors.text.secondary,
     fontSize: typography.fontSize.md,
     lineHeight: typography.lineHeight.relaxed,
-    marginTop: spacing.sm,
     marginBottom: spacing.md,
-  },
-  searchInput: {
-    borderRadius: radius.lg,
-    backgroundColor: colors.background.elevated,
-    color: colors.text.primary,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border.subtle,
-    ...shadows.subtle,
   },
   listContent: {
     paddingBottom: spacing.xxxl,
-  },
-  emptyText: {
-    color: colors.text.secondary,
-    fontSize: typography.fontSize.md,
-    textAlign: "center",
-    marginTop: spacing.xl,
   },
 });
